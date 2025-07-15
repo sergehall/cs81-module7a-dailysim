@@ -127,14 +127,17 @@
   <div id="output"></div>
 
   <script>
+    // Get the output container
     const output = document.getElementById("output");
 
-    output.style.backgroundColor = "#e0f0ff"; // start with soft morning blue
+    // Start with a soft morning blue background
+    output.style.backgroundColor = "#e0f0ff";
 
+    // Daily schedule with time, activity text, and twist
     const schedule = [
-      {time: "07:30", text: "Woke up and wrote down a dream 💭", twist: "The dream sparked a new story idea ✍️"},
-      {time: "08:00", text: "Made a unique breakfast 🥑", twist: "🧀 Random emoji popped into your head"},
-      {time: "09:30", text: "Sketched a futuristic city 🎨", twist: "Mood – 🎧 Deep focus, thanks to Lo-Fi beats"},
+      { time: "07:30", text: "Woke up and wrote down a dream 💭", twist: "The dream sparked a new story idea ✍️" },
+      { time: "08:00", text: "Made a unique breakfast 🥑", twist: "🧀 Random emoji popped into your head" },
+      { time: "09:30", text: "Sketched a futuristic city 🎨", twist: "Mood – 🎧 Deep focus, thanks to Lo-Fi beats" },
       {
         time: "12:00",
         text: "Wrote 200 words for “Window to the Sky” 📖",
@@ -157,6 +160,7 @@
       },
     ];
 
+    // Function to interpolate background color from start to end as day progresses
     function interpolateColor(start, end, progress) {
       const toRGB = hex => hex.match(/\w\w/g).map(x => parseInt(x, 16));
       const [r1, g1, b1] = toRGB(start);
@@ -167,37 +171,45 @@
       return `rgb(${r}, ${g}, ${b})`;
     }
 
+    // Function to display each activity step-by-step
     function showActivity(index) {
       if (index >= schedule.length) return;
 
-      const {time, text, twist} = schedule[index];
+      const { time, text, twist } = schedule[index];
 
-      const twistOptions = [twist, `✨ Twist: ${twist}`, `Unexpected: ${twist}`];
-      const randomTwist = twistOptions[Math.floor(Math.random() * twistOptions.length)];
+      // Randomly format the twist string with different styles
+      const twistVariants = [
+        twist,
+        `✨ ${twist}`,
+        `Unexpected: ${twist}`
+      ];
+      const randomTwist = twistVariants[Math.floor(Math.random() * twistVariants.length)];
 
+      // Create a new section element for this activity
       const section = document.createElement("section");
       section.innerHTML = `
-    <p><strong>${time}</strong> – ${text}</p>
-    <div class="twist">Twist: ${randomTwist}</div>
-  `;
+      <p><strong>${time}</strong> – ${text}</p>
+      <div class="twist">${randomTwist}</div>
+    `;
       output.appendChild(section);
 
-      // Update background color based on progress
+      // Update background color based on how far along we are in the day
       const progress = index / (schedule.length - 1);
       const startColor = "#e0f0ff"; // morning blue
-      const endColor = "#ffe0e0";   // evening pink/red
+      const endColor = "#ffe0e0";   // evening reddish pink
       output.style.backgroundColor = interpolateColor(startColor, endColor, progress);
 
+      // Wait 2–3.5 seconds before showing the next activity
       const nextDelay = 2000 + Math.floor(Math.random() * 1500);
       setTimeout(() => showActivity(index + 1), nextDelay);
     }
 
+    // Start the simulation after 1 second
     setTimeout(() => {
       showActivity(0);
     }, 1000);
-
-
   </script>
+
 </main>
 
 <footer>
